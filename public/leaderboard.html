@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Search</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <button class="tab" onclick="openTab('search')">Search</button>
+            <div id="search-subcategory" class="subcategory">
+                <button onclick="searchUser()">Search User</button>
+                <button onclick="searchCard()">Search Card</button>
+            </div>
+            <button class="tab" onclick="openTab('leaderboard')">Leaderboard</button>
+            <div id="leaderboard-subcategory" class="subcategory">
+                <button id="showLeaderboard" button onclick="showLeaderboard()">Show Leaderboard</button>
+
+                  <script>
+                    document.getElementById('showLeaderboard').addEventListener('click', () => {
+                      window.location.href = 'leaderboard';
+                    });</script>
+                <button onclick="showCardValue()">Card Value</button>
+                <button onclick="showProfileNetWorth()">Profile Net Worth</button>
+                <button onclick="showWeightedProfileValue()">Weighted Profile Value</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <header class="sticky-header">
+                <button class="open-sidebar" onclick="openSidebar()">☰</button>
+                
+            </header>
+            <div id="rankings" class="leaderboard-container">
+                <div id="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+            </div>
+            
+<script src="leaderboard.js"></script>
+</body>
+</html>
