@@ -285,7 +285,7 @@ function displayResults(results) {
         var burnValue = calculateBurnValue(result);
         card.innerHTML = `
             <img src="${result.avatar_url}" onclick="showDetails('${result.avatar_url}', '${result.username}', '${result.condition}', '${result.id}', '${result.discord_username}', '${burnValue}', '${result.rarity}', '${result.foil}')">
-            <div class="name-box">${result.username}${qualityToEmoji(result.condition)}</div>
+            <div class="name-box" data-text="${result.username}${qualityToEmoji(result.condition)}">${result.username}${qualityToEmoji(result.condition)}</div>
             <div class="card-id">${result.id}</div>
             <div class="value">💰${burnValue}</div>
         `;
