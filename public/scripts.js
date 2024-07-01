@@ -296,7 +296,7 @@ function displayResults(results) {
     lastDisplayedCards = results.slice();
     const profileNameElem = document.getElementById("profile-name");
     const profileCsElem = document.getElementById("profile-cs");
-    const profileRankingElem = document.getElementById("profile-ranking");
+    //const profileRankingElem = document.getElementById("profile-ranking");
 
     if (searchType === 'user' && results.length != 0) {
         profileNameElem.style.display = 'block';
@@ -307,7 +307,7 @@ function displayResults(results) {
     } else {
         profileNameElem.style.display = 'none';
         profileCsElem.style.display = 'none';
-        profileRankingElem.style.display = 'none';
+        //profileRankingElem.style.display = 'none';
     }
 }
 
@@ -321,7 +321,7 @@ function searchUserRanking(username) {
         })
         .then(data => {
             updateProfileCs(data.score.toFixed(2));
-            updateProfileRanking(data.ranking);
+            //updateProfileRanking(data.ranking);
         })
         .catch(error => {
             console.error('Error searching for username:', error);
