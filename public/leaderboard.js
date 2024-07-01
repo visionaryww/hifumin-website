@@ -48,3 +48,15 @@ function toggleSidebar() {
     document.querySelector('.sticky-header').classList.toggle('opened-sidebar');
     toggleMainContent();
 }
+
+function openTab(tabName) {
+    var subcategories = document.getElementsByClassName("subcategory");
+    for (var i = 0; i < subcategories.length; i++) {
+        subcategories[i].classList.remove("active");
+    }
+
+    var subcategory = document.getElementById(tabName + "-subcategory");
+    subcategory.classList.add("active");
+
+    toggleMainContent();
+}

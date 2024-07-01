@@ -12,8 +12,16 @@
         <div id="sidebar" class="sidebar">
             <button class="tab" onclick="openTab('search')">Search</button>
             <div id="search-subcategory" class="subcategory">
-                <button onclick="searchUser()">Search User</button>
-                <button onclick="searchCard()">Search Card</button>
+                <button id="lbSearchUser" onclick="searchUser()">Search User</button>
+                <script>
+                    document.getElementById('lbSearchUser').addEventListener('click', () => {
+                      window.location.href = '/';
+                    });</script>
+                <button id="lbSearchCard" onclick="searchCard()">Search Card</button>
+                <script>
+                    document.getElementById('lbSearchCard').addEventListener('click', () => {
+                      window.location.href = '/';
+                    });</script>
             </div>
             <button class="tab" onclick="openTab('leaderboard')">Leaderboard</button>
             <div id="leaderboard-subcategory" class="subcategory">
