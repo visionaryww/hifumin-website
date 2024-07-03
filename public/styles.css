@@ -156,6 +156,7 @@ p, ul, ol, h1, h2, h3, h4, h5, h6 {
     border-radius: 30px;
     width: 100%;
     font-family: 'Nunito Sans', sans-serif;
+    min-width: 100px;
 }
 
 #search-bar:focus {
@@ -619,12 +620,10 @@ main {
     transition: background-color 0.3s, transform 0.2s ease, border-color 0.3s;
 }
 
-#profile-name, #profile-cs {
+#profile-name, #profile-cs, #profile-ranking{
     display: none;
-    margin: 0 auto;
-    width: 80%;
-    max-width: 220px;
     overflow: hidden;
+    margin: 0 5px;
 }
 
 .dropbtn:hover {

@@ -261,8 +261,9 @@ function displayResults(results) {
         results.sort((a, b) => conditionOrder[a.condition] * direction - conditionOrder[b.condition] * direction);
     } else if (currentSortMethod === 'value') {
         results.sort((a, b) => calculateBurnValue(b) * direction - calculateBurnValue(a) * direction);
+    } else if (currentSortMethod === 'rarity') {
+        results.sort((a, b) => b.rarity * direction - a.rarity * direction);
     }
-    
     
 
     results.forEach(result => {
@@ -296,7 +297,7 @@ function displayResults(results) {
     lastDisplayedCards = results.slice();
     const profileNameElem = document.getElementById("profile-name");
     const profileCsElem = document.getElementById("profile-cs");
-    //const profileRankingElem = document.getElementById("profile-ranking");
+    const profileRankingElem = document.getElementById("profile-ranking");
 
     if (searchType === 'user' && results.length != 0) {
         profileNameElem.style.display = 'block';
@@ -307,7 +308,7 @@ function displayResults(results) {
     } else {
         profileNameElem.style.display = 'none';
         profileCsElem.style.display = 'none';
-        //profileRankingElem.style.display = 'none';
+        profileRankingElem.style.display = 'none';
     }
 }
 
@@ -321,7 +322,7 @@ function searchUserRanking(username) {
         })
         .then(data => {
             updateProfileCs(data.score.toFixed(2));
-            //updateProfileRanking(data.ranking);
+            updateProfileRanking(data.ranking);
         })
         .catch(error => {
             console.error('Error searching for username:', error);
@@ -360,6 +361,7 @@ function updateSortButton() {
         case 'username': sortButton.textContent = 'Sort: Username'; break;
         case 'condition': sortButton.textContent = 'Sort: Condition'; break;
         case 'value': sortButton.textContent = 'Sort: Value'; break;
+        case 'rarity': sortButton.textContent = 'Sort: Rarity'; break;
     }
 }
 

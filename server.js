@@ -128,12 +128,9 @@ app.get('/leaderboard.js', (req, res) => {
 app.get('/api/rankings', (req, res) => {
     const currentTime = new Date();
 
-    // Check if cached data exists and if less than 5 minutes have passed
     if (cachedRankings && lastFetchTime && (currentTime - lastFetchTime < CACHE_TIME)) {
-        // Serve cached data
         res.json(cachedRankings);
     } else {
-        // Perform a new query and update cache
         const query = `
         SELECT card.id, mapper_id, owner_id,
         card.username, foil, \`condition\`,
@@ -187,19 +184,16 @@ app.get('/api/rankings/search', (req, res) => {
         return res.status(400).json({ error: 'Username parameter is required' });
     }
 
-    // Check if cachedRankings is populated
     if (!cachedRankings) {
         return res.status(404).json({ error: 'Leaderboard data not available' });
     }
 
-    // Find the user in cachedRankings
     const user = cachedRankings.find(u => u.username === username);
 
     if (!user) {
         return res.status(404).json({ error: 'Username not found in leaderboard' });
     }
 
-    // Return user's placement (ranking) and score
     const { ranking, score } = user;
     res.json({ username, ranking, score });
 });
