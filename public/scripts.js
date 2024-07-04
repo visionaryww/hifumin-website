@@ -22,17 +22,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('.open-sidebar').addEventListener('click', toggleSidebar);
 
-    toggleMainContent();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get('username');
+    const currentPath = window.location.pathname;
+    const pathSegments = currentPath.split('/');
 
-    if (username) {
-        document.getElementById("search-bar").value = username;
-        search();
+    if (pathSegments.length === 4 && pathSegments[1] === 'search') {
+        const type = pathSegments[2];
+        const searchTerm = decodeURIComponent(pathSegments[3]);
+
+        if (type === 'user') {
+            document.getElementById("search-bar").value = searchTerm;
+            searchUser();
+            search();
+        } else if (type === 'card') {
+            document.getElementById("search-bar").value = searchTerm;
+            searchCard();
+            search();
+        } else {
+            console.log('Unknown URL path:', currentPath);
+        }
+    } else {
+        console.log('Unknown URL path:', currentPath);
     }
-});
 
+    window.addEventListener('popstate', function(event) {
+        if (event.state) {
+            const { username, searchType } = event.state;
+            document.getElementById("search-bar").value = username;
+
+            if (searchType === 'user') {
+                searchUser();
+                search();
+            } else if (searchType === 'card') {
+                searchCard();
+                search();
+            }
+        }
+    });
+});
 
 var ascending = true;
 var currentSortMethod = 'value';
@@ -67,8 +94,7 @@ function openTab(tabName) {
 
     var subcategory = document.getElementById(tabName + "-subcategory");
     subcategory.classList.add("active");
-
-    toggleMainContent();
+    
 }
 
 function searchUser() {
@@ -117,15 +143,25 @@ function search() {
     .then(response => response.json())
     .then(data => {
         displayResults(data);
+        updateURL(username, searchType);
     })
     .catch(error => {
         console.error('Error fetching data:', error);
-        alert('Failed to fetch search results');
     })
     .finally(() => {
         spinner.style.display = 'none';
     });
 }
+
+function updateURL(username, searchType) {
+    var newURL = searchType === 'user' ? `/search/user/${username}` : `/search/card/${username}`;
+    var currentURL = window.location.pathname + window.location.search;
+
+    if (newURL !== currentURL) {
+        history.pushState({ username: username, searchType: searchType }, null, newURL);
+    }
+}
+
 
 function qualityToEmoji(quality) {
     switch (quality) {
@@ -166,12 +202,12 @@ function showDetails(img, name, quality, card_id, owned_by, burn_value, rarity, 
                 </div>
             </div>
             <div class="details">
-                <h2><a href="#" onclick="redirectInModal_card('${name}')">${name}</a> ${qualityToEmoji(quality)}</h2>
+                <h2><a href="/search/card/${name}" onclick="redirectInModal_card('${name}')">${name}</a> ${qualityToEmoji(quality)}</h2>
                 <h4><i>${card_id}</i></h3>
                 <div class="details-info">
                     <p><strong><br>Burn Value:</strong> 💰${burn_value}</p>
                     <p><strong>Rarity:</strong> ${rarity}</p>
-                    <p><strong>Owned by:</strong> <a href="#" onclick="redirectInModal_user('${owned_by}')">${owned_by}</a></p>
+                    <p><strong>Owned by:</strong> <a href="/search/user/${owned_by}" onclick="redirectInModal_user('${owned_by}')">${owned_by}</a></p>
                 </div>
             </div>
         </div>`;

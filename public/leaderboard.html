@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Card Search</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/leaderboard.js"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -15,28 +16,28 @@
                 <button id="lbSearchUser" onclick="searchUser()">Search User</button>
                 <script>
                     document.getElementById('lbSearchUser').addEventListener('click', () => {
-                      window.location.href = '/';
+                      window.location.href = '/user/';
                     });</script>
                 <button id="lbSearchCard" onclick="searchCard()">Search Card</button>
                 <script>
                     document.getElementById('lbSearchCard').addEventListener('click', () => {
-                      window.location.href = '/';
+                      window.location.href = '/card/';
                     });</script>
             </div>
             <button class="tab" onclick="openTab('leaderboard')">Leaderboard</button>
             <div id="leaderboard-subcategory" class="subcategory">
-                <button id="showLeaderboard" button onclick="showLeaderboard()">User Leaderboard</button>
-
-                  <script>
-                    document.getElementById('showLeaderboard').addEventListener('click', () => {
-                      window.location.href = 'leaderboard';
-                    });</script>
-            </div>
+              <button id="showLeaderboardCS">Collection Score</button>
+                <script>document.getElementById('showLeaderboardCS').addEventListener('click', () => {window.location.href = '/leaderboard/collectionscore';});</script>
+              <button id="showLeaderboardNW">Networth</button>
+                <script>document.getElementById('showLeaderboardNW').addEventListener('click', () => {window.location.href = '/leaderboard/networth';});</script>
+              <button id="showLeaderboardCV">Card Value</button>
+                <script>document.getElementById('showLeaderboardCV').addEventListener('click', () => {window.location.href = '/leaderboard/cardvalue';});</script>
+          </div>
         </div>
 
         <div class="content">
             <header class="sticky-header">
-                <button class="open-sidebar" onclick="openSidebar()">☰</button>
+                <button class="open-sidebar">☰</button>
                 
             </header>
             <div id="rankings" class="leaderboard-container">
@@ -44,6 +45,6 @@
                     <div class="spinner"></div>
             </div>
             
-<script src="leaderboard.js"></script>
+
 </body>
 </html>

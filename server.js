@@ -9,13 +9,41 @@ const port = 3000;
 const path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/cardleaderboard.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cardleaderboard.js'));
+});
+
+app.get('/leaderboard/cardvalue', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'cardleaderboard.html'));
+});
+
+app.get('/leaderboard.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'leaderboard.js'));
+});
+
+app.get('/leaderboard/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
+});
+
+app.get('/scripts.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'scripts.js'));
+});
+
+app.get('/search/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const CACHE_TIME = 5 * 60 * 1000; 
-let lastFetchTime = null;
-let cachedRankings = null;
+let lastFetchTimeCS = null;
+let cachedRankingsCS = null;
+let lastFetchTimeNW = null;
+let cachedRankingsNW = null;
 
 const sql_username = process.env.SQL_USERNAME;
 const sql_password = process.env.SQL_PASSWORD;
@@ -117,19 +145,11 @@ function calculateBurnValue(card) {
     return Math.ceil(5 * conditionMultiplier * card.rarity * foilMultiplier);
 }
 
-app.get('/leaderboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
-  });
-
-app.get('/leaderboard.js', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'leaderboard.js'));
-});
-
-app.get('/api/rankings', (req, res) => {
+app.get('/api/rankings/collectionscore', (req, res) => {
     const currentTime = new Date();
 
-    if (cachedRankings && lastFetchTime && (currentTime - lastFetchTime < CACHE_TIME)) {
-        res.json(cachedRankings);
+    if (cachedRankingsCS && lastFetchTimeCS && (currentTime - lastFetchTimeCS < CACHE_TIME)) {
+        res.json(cachedRankingsCS);
     } else {
         const query = `
         SELECT card.id, mapper_id, owner_id,
@@ -168,10 +188,92 @@ app.get('/api/rankings', (req, res) => {
                     user.ranking = index + 1;
                 });
 
-                cachedRankings = usersWithScores;
-                lastFetchTime = new Date();
+                cachedRankingsCS = usersWithScores;
+                lastFetchTimeCS = new Date();
 
                 res.json(usersWithScores);
+            }
+        });
+    }
+});
+
+app.get('/api/rankings/networth', (req, res) => {
+    const currentTime = new Date();
+
+    if (cachedRankingsNW && lastFetchTimeNW && (currentTime - lastFetchTimeNW < CACHE_TIME)) {
+        res.json(cachedRankingsNW);
+    } else {
+        const query = `
+        SELECT *
+        FROM networth_leaderboard
+        ORDER BY price DESC;`;
+
+        pool.query(query, (error, results) => {
+            if (error) {
+                console.error('Error fetching user networth:', error);
+                res.status(500).json({ error: 'Internal server error' });
+            } else {
+                results.sort((a, b) => b.price - a.price);
+
+                results.forEach((user, index) => {
+                    user.ranking = index + 1;
+                });
+
+                cachedRankingsNW = results;
+                lastFetchTimeNW = new Date();
+
+                res.json(results);
+            }
+        });
+    }
+});
+
+app.get('/api/rankings/cardvalue', (req, res) => {
+    const currentTime = new Date();
+
+    if (cachedRankingsNW && lastFetchTimeNW && (currentTime - lastFetchTimeNW < CACHE_TIME)) {
+        res.json(cachedRankingsNW);
+    } else {
+        const query = `
+        SELECT card.id,
+               card.mapper_id,
+               card.owner_id,
+               card.claimed_by_id,
+               card.dropped_by_id,
+               card.username,
+               card.avatar_url,
+               card.created_at,
+               card.foil,
+               card.\`condition\`,
+               d.username AS discord_username,
+               mapper.rarity
+        FROM (
+            SELECT *
+            FROM card_leaderboard
+            ORDER BY price DESC
+            LIMIT 250
+        ) AS top_cards
+        INNER JOIN card ON top_cards."card id" = card.id
+        INNER JOIN discord_user AS d ON card.owner_id = d.id
+        INNER JOIN mapper ON card.mapper_id = mapper.id
+        WHERE card.burned = false;`;
+
+        pool.query(query, (error, results) => {
+            if (error) {
+                console.error('Error fetching card leaderboard:', error);
+                res.status(500).json({ error: 'Internal server error' });
+            } else {
+                results.sort((a, b) => b.price - a.price);
+
+                results.forEach((user, index) => {
+                    user.ranking = index + 1;
+                });
+
+                cachedRankingsNW = results;
+                lastFetchTimeNW = new Date();
+
+                res.json(results);
+                console.log(results);
             }
         });
     }
@@ -184,11 +286,11 @@ app.get('/api/rankings/search', (req, res) => {
         return res.status(400).json({ error: 'Username parameter is required' });
     }
 
-    if (!cachedRankings) {
+    if (!cachedRankingsCS) {
         return res.status(404).json({ error: 'Leaderboard data not available' });
     }
 
-    const user = cachedRankings.find(u => u.username === username);
+    const user = cachedRankingsCS.find(u => u.username === username);
 
     if (!user) {
         return res.status(404).json({ error: 'Username not found in leaderboard' });

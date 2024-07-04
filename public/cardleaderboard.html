@@ -30,41 +30,7 @@
         <div class="content">
             <header class="sticky-header">
                 <button class="open-sidebar">☰</button>
-                <form id="search-form" onsubmit="search(); return false;">
-                    <div class="search-wrapper">
-                        <div class="search-icon" onclick="search()">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                                <path fill="#666" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                            </svg>
-                        </div>
-                        <input type="text" id="search-bar" placeholder="Search by Discord Name">
-                    </div>
-                </form>
 
-                <div class="dropdown">
-                    <button id="sort-dropdown-btn" class="dropbtn">Sort:</button>
-                    <div class="dropdown-content">
-                        <a onclick="sortResults('card-id')">Card ID</a>
-                        <a onclick="sortResults('username')">Username</a>
-                        <a onclick="sortResults('condition')">Condition</a>
-                        <a onclick="sortResults('value')">Value</a>
-                        <a onclick="sortResults('rarity')">Rarity</a>
-                    </div>
-                </div>
-                <button id="sortButton" class="down"></button>
-
-                <div class="dropdown">
-                    <button id="search-dropdown-btn" class="dropbtn">Search: User</button>
-                    <div class="dropdown-content">
-                        <a onclick="searchUser()">User</a>
-                        <a onclick="searchCard()">Card</a>
-                    </div>
-                </div>
-
-                <p id="profile-name" class="text-display">User:</p>
-                <p id="profile-cs" class="text-display">CS:</p>
-                <p id="profile-ranking" class="text-display">#</p>
-                
             </header>
 
             <main id="results"></main>
@@ -82,7 +48,7 @@
         </div>
     </div>
 
-    <script src="/scripts.js"></script>
+    <script src="/cardleaderboard.js"></script>
     
 </body>
 </html>

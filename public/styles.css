@@ -420,18 +420,7 @@ main {
     pointer-events: none;
     overflow: hidden;
     z-index: 6;
-    animation: rainbow-text 3s linear infinite;
 }
-
-@keyframes rainbow-text {
-    0% {
-        background-position: 0 0;
-    }
-    100% {
-        background-position: 100% 0;
-    }
-}
-
 .card.foil .name-box::before {
     content: attr(data-text);
     position: absolute;
@@ -450,10 +439,10 @@ main {
 
 @keyframes rainbow-bg {
     0% {
-        background-position: 0 0;
+        background-position: 0% 0%;
     }
     100% {
-        background-position: 200% 100%;
+        background-position: 200% 200%;
     }
 }
 
@@ -620,10 +609,17 @@ main {
     transition: background-color 0.3s, transform 0.2s ease, border-color 0.3s;
 }
 
-#profile-name, #profile-cs, #profile-ranking{
+#profile-cs, #profile-ranking {
     display: none;
     overflow: hidden;
     margin: 0 5px;
+}
+
+#profile-name {
+    display: none;
+    overflow: hidden;
+    margin: 0 5px;
+    margin-left: 10px;
 }
 
 .dropbtn:hover {
